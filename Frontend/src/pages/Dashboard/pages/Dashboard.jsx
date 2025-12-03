@@ -1,5 +1,5 @@
 import React from "react";
-import LogoutBtn from "../../components/LogoutBtn";
+import LogoutBtn from "../../../components/LogoutBtn";
 
 const Dashboard = () => {
   return (
