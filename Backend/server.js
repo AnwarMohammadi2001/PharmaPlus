@@ -6,12 +6,10 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import sequelize from "./config/db.js";
+import { sequelize } from "./config/db.js";
 
 // Routes
 import authRoutes from "./routes/authRoutes.js";
-import projectRoutes from "./routes/projectRoutes.js";
-import emailRoutes from "./routes/emailRoutes.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -19,10 +17,10 @@ const __dirname = dirname(__filename);
 
 // ✅ Allowed origins (update this with your live site)
 const allowedOrigins = [
-  "https://tet-soft.com", // your live frontend domain
+  // "https://tet-soft.com", // your live frontend domain
   "http://localhost:3000", // local React dev
   "http://localhost:5173",
-  "https://backend.tet-soft.com",
+  // "https://backend.tet-soft.com",
 ];
 
 // ✅ Configure CORS
@@ -67,8 +65,6 @@ app.get("/", (req, res) => {
 
 // ✅ API Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/contact", emailRoutes);
 
 // ✅ Start Server
 const startServer = async () => {

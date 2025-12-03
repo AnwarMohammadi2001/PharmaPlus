@@ -1,11 +1,31 @@
-// user.js
-export default (sequelize, DataTypes) => {
-  const User = sequelize.define("User", {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: DataTypes.STRING,
-    email: { type: DataTypes.STRING, unique: true },
-    passwordHash: DataTypes.STRING,
-    role: { type: DataTypes.STRING, defaultValue: "admin" },
-  });
-  return User;
-};
+import { DataTypes } from "sequelize";
+import { sequelize } from "../config/db.js";
+
+export const User = sequelize.define("User", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+  email: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+  },
+
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+  role: {
+    type: DataTypes.ENUM("superadmin"),
+    defaultValue: "superadmin",
+  },
+});

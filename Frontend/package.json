@@ -11,9 +11,10 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.43.1",
-    "@reduxjs/toolkit": "^2.9.0",
+    "@reduxjs/toolkit": "^2.11.0",
     "@tailwindcss/vite": "^4.1.12",
     "@tanstack/react-query": "^5.90.10",
+    "axios": "^1.13.2",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.541.0",
     "react": "^19.1.1",
