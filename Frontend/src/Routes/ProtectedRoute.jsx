@@ -2,13 +2,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = () => {
-  const token = useSelector((state) => state.auth.token);
+  const accessToken = useSelector((state) => state.auth.accessToken);
 
-  if (!token) {
+  if (!accessToken) {
     return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />;
+  return <Outlet />; // 🔹 مهم: Outlet برای رندر کردن مسیرهای داخلی
 };
 
 export default ProtectedRoute;
