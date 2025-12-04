@@ -49,7 +49,7 @@ const Header = ({ onSidebarToggle, isSidebarCollapsed }) => {
             <input
               type="text"
               placeholder="Search dashboard..."
-              className="w-[300px] pl-10 pr-4 py-1.5 border border-gray-200 bg-[#ffffff]  rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-[300px] pl-10 pr-4 py-1.5 border border-gray-200 bg-[#ffffff]  rounded-full focus:outline-none focus:ring-1  focus:border-transparent"
             />
           </div>
         </div>

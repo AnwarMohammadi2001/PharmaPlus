@@ -6,14 +6,14 @@ import MainContent from "../pages/Dashboard/MainContent";
 const DashboardLayout = () => {
   const [activeComponent, setActiveComponent] = useState("dashboard");
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen w-full overflow-hidden ">
       <Sidebar
         activeComponent={activeComponent}
         setActiveComponent={setActiveComponent}
       />
-      <div className="flex-1 flex bg-[#f1f2f5] flex-col">
+      <div className="flex flex-col flex-1 h-screen overflow-hidden bg-[#f1f2f5] ">
         <Header />
-        <main className="flex-1  p-6 overflow-auto">
+        <main className="flex-1 overflow-y-auto">
           <MainContent activeComponent={activeComponent} />
         </main>
       </div>

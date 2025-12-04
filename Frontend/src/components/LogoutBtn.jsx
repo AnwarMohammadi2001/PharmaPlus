@@ -7,7 +7,7 @@ const LogoutBtn = () => {
   const handleLogout = () => {
     dispatch(logoutUser());
     // redirect to login if needed
-    window.location.href = "/login";
+    window.location.href = "/";
   };
   return <button onClick={handleLogout}>Logout</button>;
 };

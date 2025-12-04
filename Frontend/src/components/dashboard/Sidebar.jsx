@@ -52,7 +52,7 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(logoutUser());
-        navigate("/login");
+        navigate("/");
       }
     });
   };
@@ -134,7 +134,7 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
   return (
     <>
       <div
-        className={`fixed lg:static top-0 left-0 h-full z-30 transition-all duration-300 ease-in-out
+        className={`h-full z-30 transition-all duration-300 ease-in-out
           dark:bg-gray-900 dark:text-gray-200 bg-[#ffffff] 
           ${isOpen ? "w-64" : "w-0 lg:w-20"} 
           overflow-hidden`}

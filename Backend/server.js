@@ -10,6 +10,8 @@ import { sequelize } from "./config/db.js";
 
 // Routes
 import authRoutes from "./routes/authRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import medicineRoutes from "./routes/medicineRoutes.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -65,6 +67,8 @@ app.get("/", (req, res) => {
 
 // ✅ API Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/medicines", medicineRoutes);
 
 // ✅ Start Server
 const startServer = async () => {

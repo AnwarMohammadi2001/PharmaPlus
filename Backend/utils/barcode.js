@@ -1,14 +1,12 @@
-import bwipjs from "bwip-js";
+import { generateUPCA } from "../utils/barcode.js";
 
-// برگرداندن Buffer PNG برای barcodeText
-export const generateBarcodePng = async (barcodeText) => {
-  const png = await bwipjs.toBuffer({
-    bcid: "code128", // نوع بارکد
-    text: barcodeText,
-    scale: 3,
-    height: 10,
-    includetext: true,
-    textxalign: "center",
-  });
-  return png; // Buffer
-};
+const med = await Medicine.create({
+  name,
+  company,
+  category_id,
+  qty: qty || 0,
+  cost_price,
+  sale_price,
+  expiry_date: expiry_date || null,
+  barcode: generateUPCA(),
+});

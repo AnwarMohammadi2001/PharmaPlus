@@ -3,7 +3,7 @@ import LogoutBtn from "../../../components/LogoutBtn";
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="w-full">
       Welcome to Dashboard
       <LogoutBtn />
     </div>
