@@ -46,3 +46,12 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+@theme {
+  /* --font-display: "Satoshi", "sans-serif"; */
+  /* --breakpoint-3xl: 120rem; */
+  --color-primary: #3ca181;
+  --color-secondary: #f4f6fc;
+ 
+  /* ... */
+}

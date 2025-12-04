@@ -5,8 +5,27 @@ import {
   MdDashboardCustomize,
   MdWork,
   MdMessage,
-  MdLogout,
 } from "react-icons/md";
+import {
+  MdCategory,
+  MdSettings,
+  MdLogout,
+  MdHealthAndSafety,
+  MdShoppingCartCheckout,
+  MdPeople,
+  MdLocalPharmacy,
+  MdReport,
+} from "react-icons/md";
+
+import {
+  FaCapsules,
+  FaTruckLoading,
+  FaFileInvoiceDollar,
+} from "react-icons/fa";
+
+import { GiMedicines, GiSandsOfTime } from "react-icons/gi";
+
+import { FaHospital } from "react-icons/fa";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -42,25 +61,67 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
     {
       name: "Dashboard",
       value: "dashboard",
-      icon: <MdDashboardCustomize className="text-green-500" />,
+      icon: <MdDashboardCustomize />,
       adminOnly: false,
     },
     {
-      name: "Projects",
-      value: "projects",
-      icon: <MdWork className="text-blue-500" />,
+      name: "Medicines",
+      value: "medicines",
+      icon: <GiMedicines />,
       adminOnly: false,
     },
     {
-      name: "Message",
-      value: "message",
-      icon: <MdMessage className="text-pink-500" />,
+      name: "Categories",
+      value: "categories",
+      icon: <MdCategory />,
+      adminOnly: false,
+    },
+    {
+      name: "Purchase",
+      value: "purchase",
+      icon: <FaTruckLoading />,
+      adminOnly: false,
+    },
+    {
+      name: "Sales (POS Page)",
+      value: "sales",
+      icon: <FaFileInvoiceDollar />,
+      adminOnly: false,
+    },
+    {
+      name: "Customers",
+      value: "customers",
+      icon: <MdPeople />,
+      adminOnly: false,
+    },
+    {
+      name: "Suppliers",
+      value: "suppliers",
+      icon: <MdLocalPharmacy />,
+      adminOnly: false,
+    },
+    {
+      name: "Expiry Alerts",
+      value: "expiry",
+      icon: <GiSandsOfTime />,
+      adminOnly: false,
+    },
+    {
+      name: "Reports",
+      value: "reports",
+      icon: <MdReport />,
+      adminOnly: false,
+    },
+    {
+      name: "Settings",
+      value: "settings",
+      icon: <MdSettings />,
       adminOnly: false,
     },
     {
       name: "Logout",
       value: "logout",
-      icon: <MdLogout className="text-rose-500" />,
+      icon: <MdLogout />,
       adminOnly: false,
     },
   ];
@@ -74,20 +135,20 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
     <>
       <div
         className={`fixed lg:static top-0 left-0 h-full z-30 transition-all duration-300 ease-in-out
-          dark:bg-gray-900 dark:text-gray-200 bg-white shadow-md
+          dark:bg-gray-900 dark:text-gray-200 bg-[#ffffff] 
           ${isOpen ? "w-64" : "w-0 lg:w-20"} 
           overflow-hidden`}
       >
         <header className="flex items-center justify-between lg:justify-start gap-3 p-5">
-          <div className="flex items-center justify-center p-2 bg-gray-300 h-10 w-10 rounded-full">
-            <MdDashboardCustomize className="text-green-600 text-xl" />
+          <div className="flex items-center justify-center p-2 bg-primary h-9 w-9 rounded-md">
+            <FaHospital className=" text-secondary h-9 w-9" />
           </div>
 
           <span
-            className={`text-lg font-semibold text-blue-600 whitespace-nowrap 
+            className={`text-lg font-semibold text-[#000000] whitespace-nowrap 
             ${isOpen ? "inline" : "hidden lg:inline"}`}
           >
-            TET Dashboard
+            Pharma Plus
           </span>
 
           <button
@@ -98,7 +159,7 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
           </button>
         </header>
 
-        <ul className="mx-2 space-y-1">
+        <ul className="mx-2 mt-7 space-y-1">
           {accessibleComponents.map((component, index) => (
             <li key={index} className="relative group cursor-pointer">
               <button
@@ -108,14 +169,20 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
 
                   if (window.innerWidth < 1024) setIsOpen(false);
                 }}
-                className={`flex items-center gap-x-3 w-full px-4 py-3 rounded-md transition-all duration-300
+                className={`flex items-center gap-x-3 w-full px-5 py-2.5 cursor-pointer  rounded-full transition-all duration-300
                   ${
                     activeComponent === component.value
-                      ? "bg-gray-200 text-blue-600 dark:bg-gray-700 dark:text-blue-400 border-l-4 border-blue-600"
-                      : "hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-gray-200"
+                      ? "bg-[#3ca181] text-[#f4f6fc]"
+                      : "hover:bg-primary  hover:text-secondary text-gray-800"
                   }`}
               >
-                <span className="text-xl">{component.icon}</span>
+                <span
+                  className={`text-xl  hover:text-secondary ${
+                    activeComponent === component.value ? "text-secondary" : ""
+                  } `}
+                >
+                  {component.icon}
+                </span>
 
                 <span
                   className={`text-base font-medium whitespace-nowrap 

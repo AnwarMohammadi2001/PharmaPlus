@@ -20,8 +20,8 @@ const AppRoute = () => {
       {/* Protected Routes */}
 
       <Route path="/" element={<MainLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route index element={<Home />} />
+        <Route index element={<Login />} />
+        {/* <Route index element={<Home />} /> */}
       </Route>
       {/* Protected Dashboard Routes */}
       <Route
