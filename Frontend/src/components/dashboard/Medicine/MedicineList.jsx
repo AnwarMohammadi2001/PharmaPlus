@@ -9,14 +9,28 @@ import {
   Calendar,
   ArrowUpDown,
   Package,
+  ArrowDown,
 } from "lucide-react";
 import { TbDotsVertical } from "react-icons/tb";
+import CustomDropdown from "./CustomDropdown";
+import { HiEye } from "react-icons/hi2";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+import Pagination from "../../../utils/Pagination";
 
-const MedicineList = ({ medicines, onEdit, onDelete, showAlert }) => {
+const MedicineList = ({
+  medicines,
+  onEdit,
+  onDelete,
+  showAlert,
+
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredMedicines, setFilteredMedicines] = useState(medicines);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
+  const [showBarcode, setShowBarcode] = useState(null);
+  const [openOptions, setOpenOptions] = useState(null);
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -27,46 +41,47 @@ const MedicineList = ({ medicines, onEdit, onDelete, showAlert }) => {
 
   const barcodeRefs = useRef({});
 
-useEffect(() => {
-  filterMedicines();
-}, [
-  searchTerm,
-  medicines,
-  showExpiringSoon,
-  selectedCategory,
-  selectedCompany,
-]);
-
+  useEffect(() => {
+    filterMedicines();
+  }, [
+    searchTerm,
+    medicines,
+    showExpiringSoon,
+    selectedCategory,
+    selectedCompany,
+  ]);
 
   const filterMedicines = () => {
-    let filtered = medicines.filter((med) => {
-      const matchesSearch =
-        med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        med.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (med.Category?.name || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+    let filtered = [...medicines] // copy array
+      .reverse() // newest first
+      .filter((med) => {
+        const matchesSearch =
+          med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          med.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (med.Category?.name || "")
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
 
-      const matchesCategory =
-        selectedCategory === "" || med.Category?.name === selectedCategory;
+        const matchesCategory =
+          selectedCategory === "" || med.Category?.name === selectedCategory;
 
-      const matchesCompany =
-        selectedCompany === "" || med.company === selectedCompany;
+        const matchesCompany =
+          selectedCompany === "" || med.company === selectedCompany;
 
-      let matchesExpiry = true;
-      if (showExpiringSoon) {
-        const expiryDate = new Date(med.expiry_date);
-        const today = new Date();
-        const daysUntilExpiry = Math.ceil(
-          (expiryDate - today) / (1000 * 60 * 60 * 24)
+        let matchesExpiry = true;
+        if (showExpiringSoon) {
+          const expiryDate = new Date(med.expiry_date);
+          const today = new Date();
+          const daysUntilExpiry = Math.ceil(
+            (expiryDate - today) / (1000 * 60 * 60 * 24)
+          );
+          matchesExpiry = daysUntilExpiry <= 30 && daysUntilExpiry > 0;
+        }
+
+        return (
+          matchesSearch && matchesCategory && matchesCompany && matchesExpiry
         );
-        matchesExpiry = daysUntilExpiry <= 30 && daysUntilExpiry > 0;
-      }
-
-      return (
-        matchesSearch && matchesCategory && matchesCompany && matchesExpiry
-      );
-    });
+      });
 
     setFilteredMedicines(filtered);
   };
@@ -117,12 +132,14 @@ useEffect(() => {
   };
 
   const handleEdit = (med) => {
-    setEditingMedicine(med);
-    onEdit(med);
+    onEdit(med); // send full medicine object to parent
   };
-  const [openOptions, setOpenOptions] = useState(null);
+
   const handleOpenOptions = (id) => {
     setOpenOptions(openOptions === id ? null : id);
+  };
+  const handleShowBarCode = (id) => {
+    setShowBarcode(showBarcode === id ? null : id);
   };
 
   return (
@@ -138,56 +155,42 @@ useEffect(() => {
                 placeholder="Search medicines by name, company, or category..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-[500px] pl-10 pr-4 py-2 border border-gray-300 bg-[#ffffff] rounded-lg focus:ring-1 focus:ring-primary focus:outline-none placeholder:text-sm focus:border-transparent transition-all"
               />
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
+            {/* Filter by Category */}
+            <CustomDropdown
+              label="All Companies"
+              options={[...new Set(medicines.map((m) => m.company))].filter(
+                Boolean
+              )}
+              selected={selectedCompany}
+              onSelect={setSelectedCompany}
+            />
+
+            <CustomDropdown
+              label="All Categories"
+              options={[
+                ...new Set(medicines.map((m) => m.Category?.name)),
+              ].filter(Boolean)}
+              selected={selectedCategory}
+              onSelect={setSelectedCategory}
+            />
+
             {/* Expiring Soon */}
             <button
               onClick={() => setShowExpiringSoon(!showExpiringSoon)}
-              className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+              className={`px-4 py-2 bg-primary border border-gray-300 rounded-lg cursor-pointer flex items-center justify-between w-44 hover:bg-primary/80 ${
                 showExpiringSoon
                   ? "bg-red-100 text-red-600"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-gray-100 text-secondary hover:bg-gray-200"
               }`}
             >
+              Expiring Soon
               <Calendar className="w-4 h-4" />
-              Expiring Soon (30 days)
             </button>
-
-            {/* Filter by Category */}
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
-            >
-              <option value="">All Categories</option>
-              {[...new Set(medicines.map((m) => m.Category?.name))].map(
-                (cat, idx) =>
-                  cat && (
-                    <option key={idx} value={cat}>
-                      {cat}
-                    </option>
-                  )
-              )}
-            </select>
-
-            {/* Filter by Company */}
-            <select
-              value={selectedCompany}
-              onChange={(e) => setSelectedCompany(e.target.value)}
-              className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
-            >
-              <option value="">All Companies</option>
-              {[...new Set(medicines.map((m) => m.company))].map(
-                (company, idx) => (
-                  <option key={idx} value={company}>
-                    {company}
-                  </option>
-                )
-              )}
-            </select>
           </div>
         </div>
       </div>
@@ -280,15 +283,29 @@ useEffect(() => {
                 <td className="px-4 py-2  whitespace-nowrap">
                   <div ref={(el) => (barcodeRefs.current[med.id] = el)}>
                     {med.barcode ? (
-                      <div className="flex flex-col  text-gray-700">
-                        {/* <Barcode
-                          value={med.barcode}
-                          format="CODE128"
-                          height={10}
-                          className="w-[100px]"
-                        /> */}
+                      <div className="flex items-center gap-x-2 relative text-gray-700">
+                        {showBarcode === med.id && (
+                          <div className="absolute bg-white border flex  border-gray-200 rounded-lg shadow-lg right-14 -top-5 z-10">
+                            <Barcode
+                              value={med.barcode}
+                              format="CODE128"
+                              height={40}
+                              className="w-[250px]"
+                            />
+                          </div>
+                        )}
                         <div className="text-xs text-gray-900 ">
                           {med.barcode}
+                        </div>
+                        <div
+                          onClick={() => handleShowBarCode(med.id)}
+                          className="text-gray-700 cursor-pointer text-lg hover:underline"
+                        >
+                          {showBarcode === med.id ? (
+                            <FaRegEyeSlash />
+                          ) : (
+                            <FaRegEye />
+                          )}
                         </div>
                       </div>
                     ) : (

@@ -9,7 +9,7 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -17,12 +17,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3b82f6;
+  background: #696c72;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2563eb;
+  background: #696c72;
 }
 
 /* Animation for login */

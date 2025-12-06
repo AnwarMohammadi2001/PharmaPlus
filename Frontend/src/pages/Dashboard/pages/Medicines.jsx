@@ -20,6 +20,8 @@ const Medicines = () => {
   const [categories, setCategories] = useState([]);
   const [activeSection, setActiveSection] = useState("list");
   const [alertMessage, setAlertMessage] = useState({ type: "", text: "" });
+  const [editingMedicine, setEditingMedicine] = useState(null);
+
 
   useEffect(() => {
     fetchMedicines();
@@ -167,6 +169,8 @@ const Medicines = () => {
               fetchMedicines={fetchMedicines}
               setActiveSection={setActiveSection}
               showAlert={showAlert}
+              editingMedicine={editingMedicine}
+              setEditingMedicine={setEditingMedicine}
             />
           )}
 
@@ -174,7 +178,10 @@ const Medicines = () => {
             <MedicineList
               medicines={medicines}
               categories={categories}
-              onEdit={() => setActiveSection("add")}
+              onEdit={(med) => {
+                setEditingMedicine(med); // set medicine to edit
+                setActiveSection("add"); // open form
+              }}
               onDelete={handleDelete}
               showAlert={showAlert}
             />

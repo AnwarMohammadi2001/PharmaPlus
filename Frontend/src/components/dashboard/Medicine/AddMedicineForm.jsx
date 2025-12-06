@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   PlusCircle,
@@ -23,17 +23,38 @@ const AddMedicineForm = ({
   editingMedicine,
   setEditingMedicine,
 }) => {
-  const [formData, setFormData] = useState(
-    editingMedicine || {
-      name: "",
-      company: "",
-      category_id: "",
-      qty: 0,
-      cost_price: 0,
-      sale_price: 0,
-      expiry_date: "",
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    category_id: "",
+    qty: 0,
+    cost_price: 0,
+    sale_price: 0,
+    expiry_date: "",
+  });
+  useEffect(() => {
+    if (editingMedicine && editingMedicine.id) {
+      setFormData({
+        name: editingMedicine.name || "",
+        company: editingMedicine.company || "",
+        category_id: editingMedicine.category_id || "",
+        qty: editingMedicine.qty || 0,
+        cost_price: editingMedicine.cost_price || 0,
+        sale_price: editingMedicine.sale_price || 0,
+        expiry_date: editingMedicine.expiry_date || "",
+      });
+    } else {
+      setFormData({
+        name: "",
+        company: "",
+        category_id: "",
+        qty: 0,
+        cost_price: 0,
+        sale_price: 0,
+        expiry_date: "",
+      });
     }
-  );
+  }, [editingMedicine]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
