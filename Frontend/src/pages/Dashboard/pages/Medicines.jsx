@@ -22,7 +22,6 @@ const Medicines = () => {
   const [alertMessage, setAlertMessage] = useState({ type: "", text: "" });
   const [editingMedicine, setEditingMedicine] = useState(null);
 
-
   useEffect(() => {
     fetchMedicines();
     fetchCategories();
@@ -188,14 +187,6 @@ const Medicines = () => {
           )}
 
           {activeSection === "reports" && <Reports />}
-        </div>
-
-        {/* Footer Stats */}
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>
-            Last updated: {new Date().toLocaleDateString()} • Total Value: $
-            {stats.totalValue.toFixed(2)}
-          </p>
         </div>
       </div>
     </div>

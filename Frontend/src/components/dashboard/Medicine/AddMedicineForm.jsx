@@ -13,6 +13,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
 const BASE_URL = "http://localhost:5000/api/medicines";
 
 const AddMedicineForm = ({
@@ -81,7 +82,7 @@ const AddMedicineForm = ({
         expiry_date: "",
       });
       fetchMedicines();
-      setActiveSection("list");
+      setActiveSection("add");
       if (setEditingMedicine) setEditingMedicine(null);
     } catch (err) {
       console.error(err);
@@ -101,11 +102,18 @@ const AddMedicineForm = ({
     });
     if (setEditingMedicine) setEditingMedicine(null);
   };
+  // inside AddMedicineForm component
+  const [catOpen, setCatOpen] = useState(false);
+  const [catSearch, setCatSearch] = useState("");
+
+  const filteredCategories = categories.filter((c) =>
+    c.name.toLowerCase().includes(catSearch.toLowerCase())
+  );
 
   return (
-    <div className="rounded-xl shadow-lg p-6 mb-6">
+    <div className="rounded-md bg-gray-50 shadow p-6 mb-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-gray-700 flex items-center gap-2">
           {editingMedicine?.id ? (
             <Edit2 className="w-5 h-5" />
           ) : (
@@ -121,7 +129,7 @@ const AddMedicineForm = ({
           }}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
-          <X className="w-5 h-5 text-gray-500" />
+          <X className="w-5 h-5 text-red-500" />
         </button>
       </div>
 
@@ -137,7 +145,7 @@ const AddMedicineForm = ({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2 border bg-secondary border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
               placeholder="Enter medicine name"
               required
             />
@@ -153,31 +161,77 @@ const AddMedicineForm = ({
               name="company"
               value={formData.company}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2 border bg-secondary border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
               placeholder="Enter company name"
               required
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 relative">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
               <Layers className="w-4 h-4" />
               Category
             </label>
-            <select
-              name="category_id"
-              value={formData.category_id}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              required
+
+            <div
+              onClick={() => setCatOpen(!catOpen)}
+              className="w-full px-4 py-2 border bg-secondary border-gray-300 rounded-md cursor-pointer flex justify-between items-center"
             >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
+              <span>
+                {formData.category_id
+                  ? categories.find((c) => c.id == formData.category_id)?.name
+                  : "Select Category"}
+              </span>
+              <svg
+                className={`w-4 h-4 transition-transform ${
+                  catOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+
+            {catOpen && (
+              <div className="absolute top-full left-0  z-20 w-full bg-white border border-gray-300 rounded-md shadow-lg p-2">
+                {/* Search input */}
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 bg-secondary border border-gray-200 rounded-md mb-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="Search category..."
+                  value={catSearch}
+                  onChange={(e) => setCatSearch(e.target.value)}
+                />
+
+                {/* List */}
+                <div className="max-h-56 overflow-y-auto">
+                  {filteredCategories.length > 0 ? (
+                    filteredCategories.map((cat) => (
+                      <div
+                        key={cat.id}
+                        onClick={() => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            category_id: cat.id,
+                          }));
+                          setCatOpen(false);
+                        }}
+                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-md text-sm"
+                      >
+                        {cat.name}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 text-sm px-3 py-2">
+                      No category found
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -190,7 +244,7 @@ const AddMedicineForm = ({
               name="qty"
               value={formData.qty}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2 border bg-secondary border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
               min="0"
             />
           </div>
@@ -205,7 +259,7 @@ const AddMedicineForm = ({
               name="cost_price"
               value={formData.cost_price}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2 border bg-secondary border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
               step="0.01"
               min="0"
             />
@@ -221,7 +275,7 @@ const AddMedicineForm = ({
               name="sale_price"
               value={formData.sale_price}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2 border bg-secondary border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
               step="0.01"
               min="0"
             />
@@ -237,7 +291,7 @@ const AddMedicineForm = ({
               name="expiry_date"
               value={formData.expiry_date}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2 border bg-secondary border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
             />
           </div>
         </div>
@@ -245,7 +299,7 @@ const AddMedicineForm = ({
         <div className="flex gap-3 pt-4">
           <button
             type="submit"
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+            className="px-6 py-3 bg-gradient-to-r cursor-pointer bg-primary text-white font-medium rounded-md hover:bg-primary/80 transition-all shadow-md hover:shadow-lg flex items-center gap-2"
           >
             {editingMedicine?.id ? (
               <>
@@ -262,7 +316,7 @@ const AddMedicineForm = ({
           <button
             type="button"
             onClick={handleClear}
-            className="px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-all"
+            className="px-6 py-3 bg-gray-200 cursor-pointer text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-all"
           >
             Clear Form
           </button>
